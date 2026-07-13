@@ -26,6 +26,18 @@
 #include "lan8742.h"
 #include "main.h"
 #include <string.h>
+// --- Fix Missing MAC Address Macro Definitions ---
+#ifndef ETH_MAC_ADDR0
+#define ETH_MAC_ADDR0 0x00
+#define ETH_MAC_ADDR1 0x80
+#define ETH_MAC_ADDR2 0xE1
+#define ETH_MAC_ADDR3 0x00
+#define ETH_MAC_ADDR4 0x00
+#define ETH_MAC_ADDR5 0x00
+#endif
+
+// --- Expose the Static Initialization function from main.c ---
+extern void MX_ETH_Init(void);
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -72,8 +84,8 @@ typedef struct
   uint8_t buff[(ETH_RX_BUFFER_SIZE + 31) & ~31] __ALIGNED(32);
 } RxBuff_t;
 
-ETH_DMADescTypeDef  DMARxDscrTab[ETH_RX_DESC_CNT]; /* Ethernet Rx DMA Descriptors */
-ETH_DMADescTypeDef  DMATxDscrTab[ETH_TX_DESC_CNT]; /* Ethernet Tx DMA Descriptors */
+extern ETH_DMADescTypeDef  DMARxDscrTab[ETH_RX_DESC_CNT]; /* Ethernet Rx DMA Descriptors */
+extern ETH_DMADescTypeDef  DMATxDscrTab[ETH_TX_DESC_CNT]; /* Ethernet Tx DMA Descriptors */
 
 /* Memory Pool Declaration */
 LWIP_MEMPOOL_DECLARE(RX_POOL, ETH_RX_BUFFER_CNT, sizeof(RxBuff_t), "Zero-copy RX PBUF pool");
@@ -84,13 +96,8 @@ LWIP_MEMPOOL_DECLARE(RX_POOL, ETH_RX_BUFFER_CNT, sizeof(RxBuff_t), "Zero-copy RX
 static uint8_t RxAllocStatus;
 
 /* Global Ethernet handle*/
-ETH_HandleTypeDef EthHandle;
-ETH_TxPacketConfig TxConfig;
-
-extern ETH_DMADescTypeDef DMARxDscrTab[ETH_RX_DESC_CNT]; /* Ethernet Rx DMA Descriptors */
-extern ETH_DMADescTypeDef DMATxDscrTab[ETH_TX_DESC_CNT]; /* Ethernet Tx DMA Descriptors */
-/* Global Ethernet handle*/
 extern ETH_HandleTypeDef heth;
+#define EthHandle heth
 extern ETH_TxPacketConfig TxConfig;
 
 
