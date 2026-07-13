@@ -68,14 +68,22 @@ extern struct netif gnetif;
 void SystemClock_Config(void);
 static void MPU_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_ETH_Init(void);
+void MX_ETH_Init(void);
 /* USER CODE BEGIN PFP */
 static void Netif_Config(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int _write(int file, char *ptr, int len)
+{
+  for (int i = 0; i < len; i++)
+  {
+    // Write character to the ITM (Instrumentation Trace Macrocell) Stimulus Register 0
+    ITM_SendChar((*ptr++));
+  }
+  return len;
+}
 /* USER CODE END 0 */
 
 /**
@@ -112,8 +120,14 @@ int main(void)
   MX_GPIO_Init();
   MX_ETH_Init();
  /* USER CODE BEGIN 2 */
- lwip_init();
- Netif_Config();
+ //lwip_init();
+ //Netif_Config();
+ while (1)
+  {
+    HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+    printf("SWO Trace Active - LED Toggled!\n");
+    HAL_Delay(250);
+  }
  /* USER CODE END 2 */
 
   /* Initialize COM1 port (115200, 8 bits (7-bit data + 1 stop bit), no parity */
@@ -130,6 +144,13 @@ int main(void)
   /* Infinite loop */
  /* USER CODE BEGIN WHILE */
  while (1) {
+  //Toggle the Green LED on the Nucleo board
+  HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+  
+  // Send a test message across SWO wire
+  printf("SWO Yippee!");
+  //Delay for 250 ms
+  HAL_Delay(250);
  /* Read a received packet from the Ethernet buffers and send it
  to the lwIP for handling */
  ethernetif_input(&gnetif);
@@ -209,7 +230,7 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
-static void MX_ETH_Init(void)
+void MX_ETH_Init(void)
 {
 
   /* USER CODE BEGIN ETH_Init 0 */

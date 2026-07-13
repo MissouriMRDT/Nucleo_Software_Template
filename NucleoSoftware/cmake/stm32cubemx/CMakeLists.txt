@@ -16,6 +16,11 @@ set(MX_Include_Dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/BSP/STM32H5xx_Nucleo
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/CMSIS/Device/ST/STM32H5xx/Include
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/CMSIS/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../lwip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../lwip/app
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../lwip/target
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/BSP
 )
 
 # STM32CubeMX generated application sources
@@ -27,7 +32,33 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/syscalls.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../startup_stm32h563xx.s
 )
-
+list(APPEND MX_Application_Src 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../lwip/app/lwip.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../lwip/target/ethernetif.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/init.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/netif.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/timeouts.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/pbuf.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/mem.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/memp.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/ip.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/def.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/udp.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/tcp.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/tcp_in.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/tcp_out.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/inet_chksum.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/stats.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/ipv4/dhcp.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/ipv4/etharp.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/ipv4/ip4.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/ipv4/ip4_addr.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/ipv4/ip4_frag.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/ipv4/icmp.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/netif/ethernet.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/BSP/lan8742.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/core/ipv4/acd.c
+)
 # STM32 HAL/LL Drivers
 set(STM32_Drivers_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/system_stm32h5xx.c
